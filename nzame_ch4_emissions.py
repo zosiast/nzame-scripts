@@ -19,7 +19,7 @@ import cftime
 import nc_time_axis
 
 
-# In[2]:
+# In[29]:
 
 
 #constants
@@ -28,7 +28,7 @@ per_sec_to_per_yr = 60*60*24*360
 g_to_Tg = 1e12
 n_a = 6.022e23
 
-output_write = '/home/users/zosiast/jasmin_plots/no_anthro_ensemble_ssp370/'
+output_write = '/home/users/zosiast/jasmin_plots/no_anthro_ensemble_ssp370/output_plots_nov/'
 emissions_loc = '/home/users/zosiast/scripts/bl593_bc179_NOAA/emissions_arrays/'
 
 #stash codes
@@ -41,7 +41,7 @@ stash_wet_area = 'm01s08i248'
 
 # ### u-by186: net zero anthro CH4
 
-# In[8]:
+# In[3]:
 
 
 suite_id = 'u-by186'
@@ -67,7 +67,7 @@ ch4_wet_1 = data_wet_1.variables[stash_wet_ems][:]
 
 # ### u-bz146
 
-# In[9]:
+# In[4]:
 
 
 suite_id = 'u-bz146'
@@ -93,7 +93,7 @@ ch4_wet_4 = data_wet_4.variables[stash_wet_ems][:]
 
 # ### u-bz473
 
-# In[10]:
+# In[5]:
 
 
 suite_id = 'u-bz473'
@@ -119,7 +119,7 @@ ch4_wet_3 = data_wet_3.variables[stash_wet_ems][:]
 
 # ### u-bo797
 
-# In[11]:
+# In[6]:
 
 
 suite_id = 'u-bo797'
@@ -145,7 +145,7 @@ ch4_wet_2 = data_wet_2.variables[stash_wet_ems][:]
 
 # ### u-ca723
 
-# In[12]:
+# In[7]:
 
 
 suite_id = 'u-ca723'
@@ -171,7 +171,7 @@ ch4_wet_6 = data_wet_6.variables[stash_wet_ems][:]
 
 # ### u-cb039
 
-# In[13]:
+# In[8]:
 
 
 suite_id = 'u-cb039'
@@ -195,14 +195,14 @@ data_wet_5 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/{suite_id}/netcdf/{suite
 ch4_wet_5 = data_wet_5.variables[stash_wet_ems][:]
 
 
-# In[14]:
+# In[9]:
 
 
 hist_biomass_data = nc.Dataset(f'/gws/nopw/j04/htap2/znjs2/cmip6_ancils/hist/hist_ch4_biomass_ems_input.nc')
 hist_biomass_ems = hist_biomass_data.variables['emissions_CH4_biomass_low'][:]
 
 
-# In[17]:
+# In[10]:
 
 
 area = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/jmw240/covid_crunch/area/areacella_fx_UKESM1-0-LL_piControl_r1i1p1f2_gn.nc')
@@ -211,7 +211,7 @@ box_area = area.variables['areacella'][:]
 
 # ## CH4 emissions
 
-# In[15]:
+# In[11]:
 
 
 #function to convert emissions from kg m-2 s-1 to tg per year globally
@@ -225,7 +225,7 @@ def ems_convert_tg_yr(ems, area):#emissions in kg m-2 s-1
 
 # ### SSP370
 
-# In[18]:
+# In[12]:
 
 
 #ssp370
@@ -247,7 +247,7 @@ ch4_ems_anthro_tg_yr_370 = ch4_ems_tot_tg_yr_370 - ch4_wet_ems_tot_tg_yr_370
 
 # ### NZAME
 
-# In[19]:
+# In[13]:
 
 
 #by186
@@ -268,7 +268,7 @@ ch4_wet_ems_tot_tg_yr = np.mean([ch4_wet_ems_tot_tg_yr_146,ch4_wet_ems_tot_tg_yr
 ens_mean_tot_ems = np.mean([ch4_ems_tot_tg_yr_186,ch4_ems_tot_tg_yr_146,ch4_ems_tot_tg_yr_473],axis=0)
 
 
-# In[20]:
+# In[14]:
 
 
 #hist emissions
@@ -277,7 +277,7 @@ ch4_hist_biomass_tot_tg_yr, ch4_hist_biomass_kg_yr = ems_convert_tg_yr(hist_biom
 
 # ## Historical emissions
 
-# In[21]:
+# In[15]:
 
 
 bl593_tot_ch4_ems = np.load(f'{emissions_loc}ch4_anthro_ems_1850_2014.npy')
@@ -286,7 +286,7 @@ bl593_dates = np.load(f'{emissions_loc}ems_dates_1850_2014.npy')
 bl593_anthro_ch4_ems = bl593_tot_ch4_ems - bl593_wet_ch4_ems
 
 
-# In[22]:
+# In[16]:
 
 
 #total emissions
@@ -303,7 +303,7 @@ ssp_biomass_ems = (ens_mean_tot_ems - ch4_wet_ems_tot_tg_yr) - biogenic_ems_ssp
 hist_biomass_ems = ch4_hist_biomass_tot_tg_yr[:-2]
 
 
-# In[23]:
+# In[17]:
 
 
 #np_output = '/home/users/zosiast/scripts/no_anthro_ensemble/emissions_numpy/'
@@ -320,16 +320,16 @@ hist_biomass_ems = ch4_hist_biomass_tot_tg_yr[:-2]
 #np.save(f'{np_output}years_hist.npy', years_hist)
 
 
-# In[24]:
+# In[20]:
 
 
-rcParams['font.size'] = 16
+rcParams['font.size'] = 7
 
 
-# In[26]:
+# In[31]:
 
 
-fig = plt.figure(dpi=200)#usually 200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 years_1 = pd.DatetimeIndex(dtime_1).year
@@ -354,17 +354,18 @@ ax.bar(years_1, ems_diff, width=0.6, label='Removed anthropogenic',
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
+ax.text(years_1[-16], 820 , 'a', weight='bold', fontsize=8)
+
 ax.set_ylim(0,860)
 ax.set_xlim(1985,2050)
-plt.legend(fontsize=12,bbox_to_anchor=(0.45,0.35))
-plt.ylabel(" CH$_4$ emissions / Tg")
+plt.legend(fontsize=7,bbox_to_anchor=(0.45,0.35))
+plt.ylabel(" CH$_4$ emissions (Tg)")
 plt.xlabel("Year")
 #plt.title('CH4 emissions 1850-2050: net zero anthro CH4')
-plt.savefig(f'{output_write}ch4_ems_no_anthro_1850_2050.png',bbox_inches='tight')
+plt.savefig(f'{output_write}ch4_ems_no_anthro_1985_2050.pdf',format='pdf',bbox_inches='tight')
 
 
 # In[ ]:
-
 
 
 

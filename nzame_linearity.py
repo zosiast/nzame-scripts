@@ -13,7 +13,7 @@ from matplotlib import rcParams
 
 
 rcParams["mathtext.default"] = 'regular'
-rcParams['font.size'] = 16
+rcParams['font.size'] = 7
 
 output_write = '/home/users/zosiast/jasmin_plots/no_anthro_ensemble_ssp370/'
 
@@ -35,9 +35,14 @@ d_ch4_aer_conc = 1113.
 
 # difference in ozone conc (ppb) in 2050
 d_ozone_nzame = -5.2
+
+#standard deviation
+std_2050_nzame_o3 = 0.186
+std_2015_nzame_o3 = 0.032
+ozone_nzame_err = std_err_2(std_2015_nzame_o3,std_2050_nzame_o3,3)
+
 d_ozone_aer = -2.85
 d_ozone_ukesm = -3.07
-ozone_nzame_err = 0.2
 ozone_aer_err = 0.13
 
 #other ensemble members in AerChemMIP
@@ -50,10 +55,16 @@ d_o3_ens_2050 = [-3.01,-2.92,-3.63,-1.63]
 
 # difference in surface temp (K)
 d_temp_nzame = -0.96
+
+#standard deviation
+std_2050_nzame_gmst = 0.097
+std_2015_nzame_gmst = 0.046
+temp_nzame_err = std_err_2(std_2015_nzame_gmst,std_2050_nzame_gmst,3)
+
+#AerChemMIP
 d_temp_aer = -0.39
 d_temp_ukesm = -0.57
 temp_aer_err = 0.05
-temp_nzame_err = 0.09
 
 # other ens members
 d_gmst_ens_2050 = [-0.26,-0.31,-0.46,-0.34]
@@ -65,7 +76,7 @@ d_gmst_ens_2050 = [-0.26,-0.31,-0.46,-0.34]
 
 
 # 0,0 = 2015 value for ozone and methane
-fig = plt.figure(dpi=200) #200 for printing
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 x_vals = [0,d_ch4_aer_conc*2]
@@ -81,6 +92,7 @@ ax.plot([0,d_ch4_aer_conc*2], [0,d_ozone_ukesm*2], 'green',linestyle=':', label 
 ax.scatter([d_ch4_aer_conc]*4,d_o3_ens_2050, c='lightblue', marker='x', label='AerChemMIP ensemble')
 ax.scatter(d_ch4_aer_conc, d_ozone_ukesm,marker='+',label=' UKESM1', c='green',s=50)
 
+plt.text(300, 0 , 'b', weight='bold', fontsize=8)
 
 
 ax.spines['top'].set_visible(False)
@@ -90,8 +102,8 @@ ax.spines['right'].set_visible(False)
 ax.set_xlim(0,1750)
 plt.xlabel('$\Delta$ [CH$_4$] / ppb')
 plt.ylabel(f'$\Delta$ [O$_3$] / ppb')
-plt.title('2050 $\Delta$[O$_3$] vs $\Delta$[CH$_4$]')
-#plt.savefig(f'{output_write}d_o3_d_ch4_2050.png',bbox_inches='tight')
+#plt.title('2050 $\Delta$[O$_3$] vs $\Delta$[CH$_4$]')
+#plt.savefig(f'{output_write}d_o3_d_ch4_2050.pdf',format='pdf',bbox_inches='tight')
 
 
 # ## Methane vs temp relationship test
@@ -112,7 +124,7 @@ diff_aerchemmip =  ssp370_2050_conc_mein - lowntcf_2050_conc
 
 
 # 0,0 = 2015 value for ozone and methane
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax.errorbar([diff_aerchemmip], [d_temp_aer], yerr = [temp_aer_err],fmt='+',label='AerChemMIP MMM')
@@ -131,17 +143,19 @@ ax.fill_between(x_vals,y_1,y_2, color='lightblue', label = 'AerChemMIP linear')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
+plt.text(3.3,0.05 , 'a', weight='bold', fontsize=8)
+
 handles,labels = ax.get_legend_handles_labels()
 
 handles = [handles[5], handles[1], handles[0],handles[2], handles[4], handles[3]]
 labels = [labels[5], labels[1], labels[0], labels[2], labels[4], labels[3]]
 
 
-plt.legend(handles, labels, fontsize=14,frameon = False)#x_to_anchor = [0.65,0.35])
+plt.legend(handles, labels, fontsize=7,frameon = False)#x_to_anchor = [0.65,0.35])
 plt.xlabel('$\Delta\sqrt{[CH_4] / ppb}$')
 plt.ylabel(f'$\Delta$ GMST / K')
-plt.title('$\Delta$ GMST vs $\sqrt{[CH_4]}$ 2015 - 2050')
-#plt.savefig(f'{output_write}d_gmst_d_ch4_2050.png', bbox_inches='tight')
+#plt.title('$\Delta$ GMST vs $\sqrt{[CH_4]}$ 2015 - 2050')
+#plt.savefig(f'{output_write}d_gmst_d_ch4_2050.pdf',format='pdf', bbox_inches='tight')
 
 
 # In[ ]:

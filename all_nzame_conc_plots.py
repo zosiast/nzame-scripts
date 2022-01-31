@@ -18,12 +18,12 @@ import nc_time_axis
 import xarray as xr
 
 
-rcParams['font.size'] = 16
+rcParams['font.size'] = 7
 
 # In[2]:
 var_lab = 'CH$_4$'
 #output for plots
-output_write = '/home/users/zosiast/jasmin_plots/no_anthro_ensemble_ssp370/output_plots_aug/'
+output_write = '/home/users/zosiast/jasmin_plots/no_anthro_ensemble_ssp370/output_plots_jan/'
 
 #constants
 mr_ch4 = 16.
@@ -54,7 +54,7 @@ dates = '2015_2050'
 
 data_1 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/{suite_id}/netcdf/{suite_lab}_ch4_{dates}.nc')
 #extract variables to arrays
-ch4_1 = data_1.variables[stash_ch4][:]*28/mr_ch4*1e9
+ch4_1 = data_1.variables[stash_ch4][:]*28.97/mr_ch4*1e9
 lat_1 = data_1.variables['latitude'][:]
 lon_1 = data_1.variables['longitude'][:]
 
@@ -95,7 +95,7 @@ dates = '2015_2050'
 
 data_146 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/{suite_id}/netcdf/{suite_lab}_ch4_{dates}.nc')
 #extract variables to arrays
-ch4_146 = data_146.variables[stash_ch4][:]*28/mr_ch4*1e9
+ch4_146 = data_146.variables[stash_ch4][:]*28.97/mr_ch4*1e9
 lat_146 = data_146.variables['latitude'][:]
 lon_146 = data_146.variables['longitude'][:]
 
@@ -135,7 +135,7 @@ dates = '2015_2050'
 
 data_473 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/{suite_id}/netcdf/{suite_lab}_ch4_{dates}.nc')
 #extract variables to arrays
-ch4_473 = data_473.variables[stash_ch4][:]*28/mr_ch4*1e9
+ch4_473 = data_473.variables[stash_ch4][:]*28.97/mr_ch4*1e9
 lat_473 = data_473.variables['latitude'][:]
 lon_473 = data_473.variables['longitude'][:]
 
@@ -177,7 +177,7 @@ dates = '2015_2050'
 #ssp370 u-bo797
 data_3 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/{suite_id}/netcdf/{suite_lab}_ch4_{dates}.nc')
 #extract variables to arrays
-ch4_3 = data_3.variables['mass_fraction_of_methane_in_air'][:-1,:,:,:]*28/mr_ch4*1e9
+ch4_3 = data_3.variables['mass_fraction_of_methane_in_air'][:-1,:,:,:]*28.97/mr_ch4*1e9
 lat_3 = data_3.variables['latitude'][:]
 lon_3 = data_3.variables['longitude'][:]
 
@@ -221,7 +221,7 @@ dates = '2015_2050'
 #ssp370 u-bo797
 data_4 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/{suite_id}/netcdf/{suite_lab}_ch4_{dates}.nc')
 #extract variables to arrays
-ch4_4 = data_4.variables['mass_fraction_of_methane_in_air'][:,:,:,:]*28/mr_ch4*1e9
+ch4_4 = data_4.variables['mass_fraction_of_methane_in_air'][:,:,:,:]*28.97/mr_ch4*1e9
 lat_4 = data_4.variables['latitude'][:]
 lon_4 = data_4.variables['longitude'][:]
 
@@ -262,7 +262,7 @@ dates = '2015_2050'
 #ssp370 
 data_5 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/{suite_id}/netcdf/{suite_lab}_ch4_{dates}.nc')
 #extract variables to arrays
-ch4_5 = data_5.variables['mass_fraction_of_methane_in_air'][:,:,:,:]*28/mr_ch4*1e9
+ch4_5 = data_5.variables['mass_fraction_of_methane_in_air'][:,:,:,:]*28.97/mr_ch4*1e9
 lat_5 = data_5.variables['latitude'][:]
 lon_5 = data_5.variables['longitude'][:]
 
@@ -303,7 +303,7 @@ dates = '2015_2050'
 
 data_6 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/{suite_id}/netcdf/{suite_lab}_ch4_{dates}.nc')
 #extract variables to arrays
-ch4_6 = data_6.variables['mass_fraction_of_methane_in_air'][:-1,:,:,:]*28/mr_ch4*1e9
+ch4_6 = data_6.variables['mass_fraction_of_methane_in_air'][:-1,:,:,:]*28.97/mr_ch4*1e9
 lat_6 = data_6.variables['latitude'][:]
 lon_6 = data_6.variables['longitude'][:]
 
@@ -334,6 +334,45 @@ o3_6 = data_o3_6.variables[stash_o3][:-1,:,:,:]
 #oh_conc
 data_oh_6 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/{suite_id}/netcdf/{suite_lab}_oh_{dates}.nc')
 oh_6 = data_oh_6.variables[stash_oh][:-1,:,:,:]
+
+# bl593 data
+ch4_dataset_int = xr.open_dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/u-bl593/netcdf/ubl593_ch4_1850_2014.nc')
+nc_ch4_data_int = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/u-bl593/netcdf/ubl593_ch4_1850_2014.nc')
+
+data_hist_bl593 = ch4_dataset_int.sel(time=slice('1984-01-01', '2015-12-30'))
+stash_name_bl = 'UM_m01s34i009_vn1102'
+ch4_hist_bl593 = data_hist_bl593.variables[stash_name_bl]*28.97/mr_ch4*1e9
+
+time_bl593 = nc_ch4_data_int.variables['time']
+cf_dtime_bl593 = cftime.num2date(time_bl593[-32:],time_bl593.units, time_bl593.calendar)
+dtime_bl593 = np.array([nc_time_axis.CalendarDateTime(item, "360_day") for item in cf_dtime_bl593])
+
+
+
+# bn213 dataset
+ch4_dataset_bn213 = xr.open_dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/u-bn213/netcdf/ubn213_ch4_ann_1985_2013.nc')
+nc_ch4_data_bn213 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/u-bn213/netcdf/ubn213_ch4_ann_1985_2013.nc')
+
+data_hist_bn213 = ch4_dataset_bn213.sel(time=slice('1984-01-01', '2015-12-30'))
+
+ch4_hist_bn213 = data_hist_bn213.variables[stash_ch4]*28.97/mr_ch4*1e9
+
+time_bn213 = nc_ch4_data_int.variables['time']
+cf_dtime_bn213 = cftime.num2date(time_bn213[-30:],time_bn213.units, time_bn213.calendar)
+dtime_bn213 = np.array([nc_time_axis.CalendarDateTime(item, "360_day") for item in cf_dtime_bn213])
+
+# bl998 dataset
+ch4_dataset_bl998 = xr.open_dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/u-bl998/netcdf/ubl998_ch4_ann_1985_2013.nc')
+nc_ch4_data_bl998 = nc.Dataset(f'/gws/nopw/j04/ukca_vol1/znjs2/u-bl998/netcdf/ubl998_ch4_ann_1985_2013.nc')
+
+data_hist_bl998 = ch4_dataset_bl998.sel(time=slice('1984-01-01', '2015-12-30'))
+
+ch4_hist_bl998 = data_hist_bl998.variables[stash_ch4]*28.97/mr_ch4*1e9
+
+time_bl998 = nc_ch4_data_int.variables['time']
+cf_dtime_bl998 = cftime.num2date(time_bl998[-30:],time_bl998.units, time_bl998.calendar)
+dtime_bl998 = np.array([nc_time_axis.CalendarDateTime(item, "360_day") for item in cf_dtime_bl998])
+
 
 # ## Area and volume datasets
 
@@ -455,16 +494,16 @@ t_ch4_ens_mean = np.mean([t_ch4_by186,t_ch4_bz146,t_ch4_bz473],axis=0)
 t_ch4_ssp_mean = np.mean([t_ch4_bo797,t_ch4_ca723,t_ch4_cb039],axis=0)
 
 #Fig: methane lifetime
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax.plot(dtime_1, t_ch4_by186, c='skyblue',linewidth=1)
 ax.plot(dtime_146, t_ch4_bz146, c='skyblue',linewidth=1)
 ax.plot(dtime_473, t_ch4_bz473, c='skyblue',linewidth=1)
 
-ax.plot(dtime_473, t_ch4_ens_mean, label = 'NZAME',c='C0')
+ax.plot(dtime_473, t_ch4_ens_mean, label = 'ZAME',c='C0')
 
-ax.plot(dtime_6, t_ch4_bo812, c='#1d3354',linewidth=1, label = 'SSP1-2.6')
+ax.plot(dtime_6, t_ch4_bo812, c='orange',linewidth=1, label = 'SSP1-2.6')
 
 ax.plot(dtime_3, t_ch4_bo797, c='pink')
 ax.plot(dtime_4, t_ch4_ca723, c='pink')
@@ -475,11 +514,13 @@ ax.plot([dtime_1[0],dtime_1[-1]], [9.823, 9.823], 'grey',linestyle=':', label = 
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-plt.legend()
+plt.text(dtime_1[2], 9.4 , 'b', weight='bold', fontsize=8)
+
+plt.legend(loc=3)
 plt.xlabel('Time')
-plt.ylabel('CH$_4$ lifetime / years')
+plt.ylabel('CH$_4$ lifetime (years)')
 #plt.title('CH$_4$ lifetime 2015-2050')
-plt.savefig(f'{output_write}ch4_lifetime_2015_2050.png')
+plt.savefig(f'{output_write}ch4_lifetime_2015_2050.eps', format = 'eps', bbox_inches='tight')
 
 print('Lifetime calcs and plots done')
 
@@ -502,6 +543,12 @@ d_time_2014 = cftime.datetime(year=2014, month=6, day=1)
 nc_dtime_2014 = nc_time_axis.CalendarDateTime(d_time_2014, "360_day")
 dtime_2014_2050 = np.insert(dtime_1,0, nc_dtime_2014)
 
+d_time_2015 = cftime.datetime(year=2015, month=6, day=1)
+nc_dtime_2015 = nc_time_axis.CalendarDateTime(d_time_2015, "360_day")
+
+noaa_time_1985_2015 = np.append(dtime_bn213,nc_dtime_2015)
+noaa_dtime_1985_2020 = np.concatenate((noaa_time_1985_2015,dtime_2014_2050[2:7]),axis=0)
+
 # ## CH4 surface conc
 
 # mean surface conc
@@ -520,18 +567,28 @@ ch4_lat_weighted_ssp = np.mean([ch4_lat_weighted_bo797,ch4_lat_weighted_ca723,ch
 
 ch4_lat_weighted_bo812 = np.mean(np.average(ch4_6[:,0,:,:],axis=(1),weights = lat_area_scaled), axis = 1)
 
+# surface conc for hist ensemble members
+ch4_lat_weighted_bl593 = np.mean(np.average(ch4_hist_bl593[:,0,:,:],axis=(1),weights = lat_area_scaled), axis = 1)
+
+ch4_lat_weighted_bn213 = np.mean(np.average(ch4_hist_bn213[:,0,:,:],axis=(1),weights = lat_area_scaled), axis = 1)
+
+ch4_lat_weighted_bl998 = np.mean(np.average(ch4_hist_bl998[:,0,:,:],axis=(1),weights = lat_area_scaled), axis = 1)
+
+# hist ensemble mean
+hist_mean_ch4 = np.mean([ch4_lat_weighted_bl998,ch4_lat_weighted_bn213,ch4_lat_weighted_bl593[-30:]],axis=0)
+
 
 # 2014-2050 area weighted CH4 surface conc with obs
 
 
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_by186,0, ch4_2014_bl593),  c='skyblue',linewidth=1)
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_bz146,0,ch4_2014_bn213),  c='skyblue',linewidth=1)
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_bz473,0, ch4_2014_bl998),  c='skyblue',linewidth=1)
 
-ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_ens,0,ch4_2014_ens_mean), label = 'NZAME', c='C0',linewidth=1)
+ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_ens,0,ch4_2014_ens_mean), label = 'ZAME', c='C0',linewidth=1)
 
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_bo797,0, ch4_2014_bl593), c='pink')
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_ca723,0, ch4_2014_bl998), c='pink')
@@ -542,14 +599,16 @@ ax.scatter(dtime_2014_2050[:6], noaa_mean_conc[-6:], c='darkslategray', label = 
 
 ax.plot([dtime_2014_2050[0],dtime_2014_2050[-1]], [776, 776], 'grey',linestyle=':', label = 'PI level')
 
+
+
 ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
+#ax2.spines['top'].set_visible(False)
 
 plt.legend()
 plt.xlabel('Time')
-plt.ylabel(f'Mean surface [{var_lab}] / ppb')
+plt.ylabel(f'Mean surface [{var_lab}] (ppb)')
 #plt.title(f'Mean surface {var_lab} 2015-2050')
-#plt.savefig(f'{output_write}ch4_surface_conc_obs_2015_2050.png')
+#plt.savefig(f'{output_write}ch4_surface_conc_obs_2015_2050.eps', format = 'eps', bbox_inches='tight')
 
 
 # Normalise to year 2000 values
@@ -561,15 +620,12 @@ pi_ratio_2000 = 776./ch4_2000_bl593
 
 
 # Normalised surface conc
-
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_by186,0, ch4_2014_bl593)/ch4_2000_bl593,  c='skyblue',linewidth=1)
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_bz146,0,ch4_2014_bn213)/ch4_2000_bl593,  c='skyblue',linewidth=1)
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_bz473,0, ch4_2014_bl998)/ch4_2000_bl593,  c='skyblue',linewidth=1)
-
-ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_bo812,0, ch4_2014_bl998)/ch4_2000_bl593,  label='SSP1-2.6', c='#1d3354',linewidth=1)
 
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_ens,0,ch4_2014_ens_mean)/ch4_2000_bl593, label = 'NZAME', c='C0',linewidth=1)
 
@@ -578,20 +634,36 @@ ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_ca723,0, ch4_2014_bl998)/ch4
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_cb039,0,ch4_2014_bn213)/ch4_2000_bl593, c='pink')
 ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_ssp,0,ch4_2014_ens_mean)/ch4_2000_bl593, label = 'SSP3-7.0', c='#f11111')
 
-ax.plot([dtime_2014_2050[0],dtime_2014_2050[-1]], [pi_ratio_2000, pi_ratio_2000], 'grey',linestyle=':', label = 'PI level')
+ax.plot([dtime_bl593[0],dtime_2014_2050[-1]], [pi_ratio_2000, pi_ratio_2000], 'grey',linestyle=':', label = 'PI level')
 
-ax.scatter(dtime_2014_2050[:6], noaa_mean_conc[-6:]/ch4_2000_noaa, c='darkslategray', label = 'NOAA obs', marker='+')
+ax.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_bo812,0, ch4_2014_bl998)/ch4_2000_bl593,  label='SSP1-2.6', c='orange',linewidth=1)
 
+ax.plot(dtime_bl593, ch4_lat_weighted_bl593/ch4_2000_bl593,  c='lightgrey', linewidth=1,zorder=1)
+ax.plot(dtime_bn213, ch4_lat_weighted_bn213/ch4_2000_bl593,  c='lightgrey',linewidth=1,zorder=1)
+ax.plot(dtime_bl998, ch4_lat_weighted_bl998/ch4_2000_bl593,  c='lightgrey',linewidth=1,zorder=1)
+
+ax.plot(dtime_bl998, hist_mean_ch4/ch4_2000_bl593,  c='grey',label='historical',zorder=2)
+
+ax.plot(noaa_dtime_1985_2020, noaa_mean_conc[1:]/ch4_2000_noaa, c='k', label = 'NOAA obs', marker='+',zorder=3, ms=3, alpha = 0.7, ls="none")
+
+ax.text(dtime_1[-15], 1.4 , 'b', weight='bold', fontsize=8)
+
+
+ax2=ax.twinx()
+#ax2.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_ens,0,ch4_2014_ens_mean), c='black',linewidth=1, linestyle='--')
+#ax2.plot(dtime_2014_2050, np.insert(ch4_lat_weighted_ssp,0,ch4_2014_ens_mean), c='black',linestyle='--')
+ax2.set_ylim(545, 2260)
 
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
+ax2.spines['top'].set_visible(False)
 
-plt.legend()
+ax.legend(fontsize = 7,ncol=2, loc=2)
 plt.xlabel('Time')
-plt.ylabel(f'Mean surface [{var_lab}] / year 2000 [CH4]')
+ax.set_ylabel(f'Mean surface [{var_lab}] / year 2000 [CH$_4$]')
+ax2.set_ylabel(f'Mean surface model [{var_lab}] (ppb)')
 #plt.title(f'Mean surface {var_lab} 2015-2050 relative to year 2000')
-plt.savefig(f'{output_write}ch4_relative_surface_conc_2015_2050.png')
-
+plt.savefig(f'{output_write}ch4_relative_surface_conc_2015_2050.eps', format = 'eps', bbox_inches='tight')
 
 
 # GMST plots
@@ -627,22 +699,30 @@ mean_sur_temp_cb039 = np.average(temp_5_lon_mean,weights = lat_area_scaled, axis
 
 gmst_ens_mean_ssp = np.mean([mean_sur_temp_bo797,mean_sur_temp_ca723,mean_sur_temp_cb039],axis = 0)
 
+#bo812
+temp_6_lon_mean = np.mean(temp_6, axis = 2)
+mean_sur_temp_bo812 = np.average(temp_6_lon_mean,weights = lat_area_scaled, axis = (1))
+
+
 
 # GMST vs time
 
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax.plot(dtime_1, mean_sur_temp_186, c='skyblue',linewidth=1) #temp for by186 is from 2014(?)
 ax.plot(dtime_146, mean_sur_temp_146,  c='skyblue',linewidth=1)
 ax.plot(dtime_473, mean_sur_temp_473, c='skyblue',linewidth=1)
 
-ax.plot(dtime_473, gmst_ens_mean, label = 'NZAME',c='C0')
+ax.plot(dtime_473, gmst_ens_mean, label = 'ZAME',c='C0')
 
 ax.plot(dtime_3, mean_sur_temp_bo797, c='pink')
 ax.plot(dtime_4, mean_sur_temp_ca723, c='pink')
 ax.plot(dtime_5, mean_sur_temp_cb039, c='pink')
-ax.plot(dtime_3, gmst_ens_mean_ssp, label = 'SSP3-7.0',c='#f11111')
+#ax.plot(dtime_3, gmst_ens_mean_ssp, label = 'SSP3-7.0',c='#f11111')
+
+ax.plot(dtime_6, mean_sur_temp_bo812, c='orange')
+
 
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
@@ -650,37 +730,45 @@ ax.spines['right'].set_visible(False)
 
 plt.legend()
 plt.xlabel('Time')
-plt.ylabel(f'GMST / K')
+plt.ylabel(f'GMST (K)')
 #plt.title('GMST 2015-2050')
-plt.savefig(f'{output_write}gmst_2015_2050.png')
+plt.savefig(f'{output_write}gmst_2015_2050.eps', format = 'eps', bbox_inches='tight')
 
 
 # GMST anomaly wrt 2015
 
 
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax.plot(dtime_1, mean_sur_temp_186 - mean_sur_temp_186[0], c='skyblue',linewidth=1) #temp for by186 is from 2014(?)
 ax.plot(dtime_146, mean_sur_temp_146 - mean_sur_temp_146[0],  c='skyblue',linewidth=1)
 ax.plot(dtime_473, mean_sur_temp_473 - mean_sur_temp_473[0], c='skyblue',linewidth=1)
 
-ax.plot(dtime_473, gmst_ens_mean - gmst_ens_mean[0], label = 'NZAME',c='C0')
+ax.plot(dtime_473, gmst_ens_mean - gmst_ens_mean[0], label = 'ZAME',c='C0')
 
 ax.plot(dtime_3, mean_sur_temp_bo797 - mean_sur_temp_bo797[0], c='pink')
 ax.plot(dtime_4, mean_sur_temp_ca723 - mean_sur_temp_ca723[0], c='pink')
 ax.plot(dtime_5, mean_sur_temp_cb039 - mean_sur_temp_cb039[0], c='pink')
+
+ax.plot(dtime_6, mean_sur_temp_bo812 - mean_sur_temp_bo812[0], c='orange', label = 'SSP1-2.6')
+
 ax.plot(dtime_3, gmst_ens_mean_ssp - gmst_ens_mean_ssp[0], label = 'SSP3-7.0',c='#f11111')
+
+
 
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
+plt.text(dtime_1[2], 1.9 , 'a', weight='bold', fontsize=8)
 
-plt.legend()
+plt.legend(bbox_to_anchor=(0.5,0.75))
 plt.xlabel('Time')
-plt.ylabel(f'GMST anomaly wrt 2015 / K')
+plt.ylabel(f'GMST anomaly wrt 2015 (K)')
 #plt.title('GMST anomaly 2015-2050')
-plt.savefig(f'{output_write}gmst_anomaly_2015_2050.png')
+plt.savefig(f'{output_write}gmst_anomaly_2015_2050_ssp126.eps', format = 'eps', bbox_inches='tight')
+
+
 
 #gmst map plot
 gmst_mean_map_nzame = np.mean([temp_1,temp_146,temp_473],axis = 0)
@@ -697,24 +785,25 @@ newcolors = np.vstack((top(np.linspace(0, 1, 90)),
 newcmp = ListedColormap(newcolors, name='Red_blue')
 
 
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax = plt.axes(projection=ccrs.Robinson(central_longitude=0, globe=None))
 ax.set_global()
 ax.coastlines(linewidth=0.5)
 
-var_name = 'Surface Temperature$_{NZAME - SSP37.0}$'
+var_name = 'Surface Temperature$_{ZAME - SSP37.0}$'
 
 ch4_diff_cyclic, lon_plot = add_cyclic_point(np.mean(gmst_mean_map_nzame[-10:,:,:] - gmst_mean_map_ssp[-10:,:,:],
                                                      axis=0), coord=lon_473)
 
 plt.pcolormesh(lon_plot,lat_473,ch4_diff_cyclic, cmap=newcmp,transform=ccrs.PlateCarree(central_longitude=0), vmin=-9, vmax=1)
 
+plt.annotate('b', (0.1,0.85), xycoords='figure fraction',weight='bold', fontsize=8)
 
 plt.colorbar(label = f'{var_name} / K',orientation='horizontal',pad=0.05)
-#plt.title(f'Surface temperature 2040-2050: NZAME - SSP3-7.0')
-plt.savefig(f'{output_write}gmst_surf_map_2040_2050.png')
+#plt.title(f'Surface temperature 2040-2050: ZAME - SSP3-7.0')
+plt.savefig(f'{output_write}gmst_surf_map_2040_2050.eps', format = 'eps', bbox_inches='tight')
 
 #Trop mask based on trop mask variable
 
@@ -727,15 +816,15 @@ trop_mask_3 = ma.masked_where(trop_3 < 1, trop_3)
 
 
 #ozone in ppb
-o3_186_ppb = o3_1*28/mr_o3*1e9
-o3_146_ppb = o3_146*28/mr_o3*1e9
-o3_473_ppb = o3_473*28/mr_o3*1e9
+o3_186_ppb = o3_1*28.97/mr_o3*1e9
+o3_146_ppb = o3_146*28.97/mr_o3*1e9
+o3_473_ppb = o3_473*28.97/mr_o3*1e9
 
-o3_bo797 = o3_3*28/mr_o3*1e9
-o3_ca723 = o3_4*28/mr_o3*1e9
-o3_cb039 = o3_5*28/mr_o3*1e9
+o3_bo797 = o3_3*28.97/mr_o3*1e9
+o3_ca723 = o3_4*28.97/mr_o3*1e9
+o3_cb039 = o3_5*28.97/mr_o3*1e9
 
-o3_bo812 = o3_6*28/mr_o3*1e9
+o3_bo812 = o3_6*28.97/mr_o3*1e9
 
 #surface selected
 surf_o3_186 = o3_186_ppb[:,0,:,:]
@@ -767,14 +856,14 @@ o3_lat_weighted_ens_mean_ssp = np.mean([o3_lat_weighted_bo797[:36],o3_lat_weight
 
 
 # o3 surface conc
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax.plot(dtime_1, o3_lat_weighted_186, c='skyblue',linewidth=1)
 ax.plot(dtime_146, o3_lat_weighted_146,  c='skyblue',linewidth=1)
 ax.plot(dtime_473, o3_lat_weighted_473,  c='skyblue',linewidth=1)
 
-ax.plot(dtime_473, o3_lat_weighted_ens_mean, label = 'NZAME', c='C0')
+ax.plot(dtime_473, o3_lat_weighted_ens_mean, label = 'ZAME', c='C0')
 
 ax.plot(dtime_3,  o3_lat_weighted_bo797[:36], c='pink')
 ax.plot(dtime_4, o3_lat_weighted_ca723, c='pink')
@@ -788,9 +877,9 @@ ax.spines['right'].set_visible(False)
 
 plt.legend()
 plt.xlabel('Time')
-plt.ylabel(f'O$_3$ / ppb')
+plt.ylabel(f'O$_3$ (ppb)')
 #plt.title('O$_3$ mean surface conc 2015-2050')
-plt.savefig(f'{output_write}o3_surface_area_weighted_2015_2050.png')
+plt.savefig(f'{output_write}o3_surface_area_weighted_2015_2050.eps', format = 'eps', bbox_inches='tight')
 
 #population weighting
 #area weighted by population
@@ -809,19 +898,21 @@ o3_pop_weighted_ens_mean_ssp = np.mean([o3_pop_weighted_bo797,o3_pop_weighted_ca
 o3_pop_weighted_bo812 = np.average(surf_o3_ssp126,axis=(1,2),weights = pop_data_2015_2050_ssp1)
 
 #ozone surface population weighted
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax.plot(dtime_1, o3_pop_weighted_186, c='skyblue',linewidth=1)
 ax.plot(dtime_146, o3_pop_weighted_146, c='skyblue',linewidth=1)
 ax.plot(dtime_473, o3_pop_weighted_473, c='skyblue',linewidth=1)
 
-ax.plot(dtime_473, o3_pop_weighted_ens_mean, label = 'NZAME', c='C0')
+ax.plot(dtime_473, o3_pop_weighted_ens_mean, label = 'ZAME', c='C0')
 
 ax.plot(dtime_3,  o3_pop_weighted_bo797, c='pink')
 ax.plot(dtime_3,  o3_pop_weighted_ca723, c='pink')
 ax.plot(dtime_3,  o3_pop_weighted_cb039, c='pink')
-ax.plot(dtime_3,  o3_pop_weighted_bo812, label = 'SSP1-2.6', c='#1d3354')
+ax.plot(dtime_3,  o3_pop_weighted_bo812, label = 'SSP1-2.6', c='orange')
+
+plt.text(dtime_1[2], 34.5 , 'd', weight='bold', fontsize=8)
 
 
 ax.plot(dtime_3,  o3_pop_weighted_ens_mean_ssp, label = 'SSP3-7.0', c='#f11111')
@@ -831,21 +922,21 @@ ax.plot(dtime_3,  o3_pop_weighted_ens_mean_ssp, label = 'SSP3-7.0', c='#f11111')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 
-plt.legend()
+plt.legend(loc=3)
 plt.xlabel('Time')
-plt.ylabel(f'O$_3$ / ppb')
+plt.ylabel(f'Pop. wt. O$_3$ (ppb)')
 #plt.title('O$_3$ mean surface conc 2015-2050: population weighted')
-plt.savefig(f'{output_write}o3_surface_pop_weighted_2015_2050.png')
+plt.savefig(f'{output_write}o3_surface_pop_weighted_2015_2050.eps', format = 'eps', bbox_inches='tight')
 
 # ozone surface concentration plot
 
-fig = plt.figure(dpi=100)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax = plt.axes(projection=ccrs.Robinson(central_longitude=0.0))
-ax.coastlines(linewidth=0.5)
+ax.coastlines(linewidth=0.3)
 
-var_name = 'Surface [O$_3$]$_{NZAME - SSP37.0}$'
+var_name = 'Surface [O$_3$]$_{ZAME - SSP37.0}$'
 
 ch4_diff_cyclic, lon_plot = add_cyclic_point(np.mean(surf_o3_ens_mean[-10:,:,:] - surf_o3_ens_mean_ssp[-10:,:,:],axis=0),
                                              coord=lon_473)
@@ -853,9 +944,11 @@ ch4_diff_cyclic, lon_plot = add_cyclic_point(np.mean(surf_o3_ens_mean[-10:,:,:] 
 plt.pcolormesh(lon_plot,lat_473,ch4_diff_cyclic, cmap='Oranges_r',vmin = -18, vmax = 0, 
                transform=ccrs.PlateCarree(central_longitude=0))#, cmap='bwr', vmin = -8, vmax = 8)
 
-plt.colorbar(label = f'{var_name} / ppb',orientation='horizontal',pad=0.05)
-#plt.title(f'Surface ozone 2040-2050: NZAME - SSP3-7.0')
-plt.savefig(f'{output_write}o3_surf_map_2040_2050.png')
+plt.annotate('c', (0.1,0.85), xycoords='figure fraction',weight='bold', fontsize=8)
+
+plt.colorbar(label = f'{var_name} (ppb)',orientation='horizontal',pad=0.05)
+#plt.title(f'Surface ozone 2040-2050: ZAME - SSP3-7.0')
+plt.savefig(f'{output_write}o3_surf_map_2040_2050.eps', format = 'eps', bbox_inches='tight')
 
 
 
@@ -907,20 +1000,19 @@ oh_trop_ens_mean_ssp = np.mean([oh_trop_mean_bo797,oh_trop_mean_ca723,oh_trop_me
 
 # OH trop mean conc
 
-fig = plt.figure(dpi=200)
+fig = plt.figure(figsize=(3.5,2.625), dpi=300)
 ax = plt.axes()
 
 ax.plot(dtime_1, oh_trop_mean_186/1e6, c='skyblue',linewidth=1)
 ax.plot(dtime_146, oh_trop_mean_146/1e6,  c='skyblue',linewidth=1)
 ax.plot(dtime_473, oh_trop_mean_473/1e6,  c='skyblue',linewidth=1)
-
-ax.plot(dtime_6, oh_trop_mean_bo812/1e6, label='SSP1-2.6', c='#1d3354',linewidth=1)
-
-ax.plot(dtime_473, oh_trop_ens_mean/1e6, label = 'NZAME', c='C0')
+ax.plot(dtime_473, oh_trop_ens_mean/1e6, label = 'ZAME', c='C0')
 
 ax.plot(dtime_3, oh_trop_mean_bo797/1e6, c='pink')
 ax.plot(dtime_4, oh_trop_mean_ca723/1e6, c='pink')
 ax.plot(dtime_5, oh_trop_mean_cb039/1e6, c='pink')
+
+ax.plot(dtime_6, oh_trop_mean_bo812/1e6, label='SSP1-2.6', c='orange',linewidth=1)
 
 ax.plot(dtime_4, oh_trop_ens_mean_ssp/1e6, label = 'SSP3-7.0', c='#f11111')
 ax.plot([dtime_1[0],dtime_1[-1]], [0.825, 0.825], 'grey',linestyle=':', label = 'PI level')
@@ -929,11 +1021,13 @@ ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 #ax.set_xticks(labels)
 
-plt.legend()
+plt.text(dtime_1[2], 1.3 , 'a', weight='bold', fontsize=8)
+
+plt.legend(loc=3)
 plt.xlabel('Time')
-plt.ylabel('OH / $10^6$ molec cm$^{-3}$')
+plt.ylabel('OH ($10^6$ molec cm$^{-3}$)')
 #plt.title('OH trop mean conc 2015-2025')
-plt.savefig(f'{output_write}oh_trop_mean_2015_2050.png')
+plt.savefig(f'{output_write}oh_trop_mean_2015_2050.eps', format = 'eps', bbox_inches='tight')
 
 
 ## Quantitative print data for 2040-2050
@@ -948,7 +1042,7 @@ def mean_std_2040_2050(a,b,c,a_ssp,b_ssp,c_ssp,var,units):
     diff_2040_2050 = mean_2040_2050_nzame - mean_2040_2050_ssp
     diff_2040_2050_err = np.sqrt(std_2040_2050_nzame**2 + std_2040_2050_ssp**2)
     
-    print(f'{var} 2040-2050 NZAME: {mean_2040_2050_nzame:.2f} ± {std_2040_2050_nzame:.2f} {units}')
+    print(f'{var} 2040-2050 ZAME: {mean_2040_2050_nzame:.2f} ± {std_2040_2050_nzame:.2f} {units}')
     print(f'{var} 2040-2050 SSP: {mean_2040_2050_ssp:.2f} ± {std_2040_2050_ssp:.2f} {units}')
     print('SSP increases over 2040-2050')
     print(f'{var} difference 2040-50: {diff_2040_2050:.2f} ± {diff_2040_2050_err:.2f} {units}')
@@ -964,9 +1058,23 @@ def mean_std_2050(a,b,c,a_ssp,b_ssp,c_ssp,var,units):
     diff_2050 = mean_2050_nzame - mean_2050_ssp
     diff_2050_err = np.sqrt(std_2050_nzame**2 + std_2050_ssp**2)
     
-    print(f'{var} 2050 NZAME: {mean_2050_nzame:.3f} ± {std_2050_nzame:.3f} {units}')
+    print(f'{var} 2050 ZAME: {mean_2050_nzame:.3f} ± {std_2050_nzame:.3f} {units}')
     print(f'{var} 2050 SSP: {mean_2050_ssp:.3f} ± {std_2050_ssp:.3f} {units}')
     print(f'{var} difference 2050: {diff_2050:.3f} ± {diff_2050_err:.3f} {units}')
+    
+def mean_std_2015(a,b,c,a_ssp,b_ssp,c_ssp,var,units):
+    mean_2015_nzame = np.mean([a[0],b[0],c[0]])
+    std_2015_nzame = np.mean(np.std([a[0],b[0],b[0]],axis=0))
+    
+    mean_2015_ssp = np.mean([a_ssp[0],b_ssp[0],c_ssp[0]])
+    std_2015_ssp = np.mean(np.std([a_ssp[0],b_ssp[0],c_ssp[0]],axis=0))
+    
+    diff_2015 = mean_2015_nzame - mean_2015_ssp
+    diff_2015_err = np.sqrt(std_2015_nzame**2 + std_2015_ssp**2)
+    
+    print(f'{var} 2015 ZAME: {mean_2015_nzame:.3f} ± {std_2015_nzame:.3f} {units}')
+    print(f'{var} 2015 SSP: {mean_2015_ssp:.3f} ± {std_2015_ssp:.3f} {units}')
+    print(f'{var} difference 2015: {diff_2015:.3f} ± {diff_2015_err:.3f} {units}')
 
 # prints output file with 2040-2050 data
 import sys 
@@ -1011,6 +1119,9 @@ mean_std_2050(ch4_lat_weighted_by186,ch4_lat_weighted_bz146,ch4_lat_weighted_bz4
               ch4_lat_weighted_ca723,ch4_lat_weighted_cb039,'CH4 (area)','ppb')
 print()
 mean_std_2050(mean_sur_temp_473,mean_sur_temp_146,mean_sur_temp_186,mean_sur_temp_bo797,
+              mean_sur_temp_ca723,mean_sur_temp_cb039,'GMST','K')
+print()
+mean_std_2015(mean_sur_temp_473,mean_sur_temp_146,mean_sur_temp_186,mean_sur_temp_bo797,
               mean_sur_temp_ca723,mean_sur_temp_cb039,'GMST','K')
 
 sys.stdout.close()
